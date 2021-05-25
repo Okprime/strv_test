@@ -10,7 +10,6 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
-// Our parent block
 describe('contact', () => {
   describe('/POST contact', () => {
     it('it should return an error becasue a token has to be passed', (done) => {
