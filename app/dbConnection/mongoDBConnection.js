@@ -6,8 +6,8 @@ const mongoose = require('mongoose');
 mongoose.set('useCreateIndex', true);
 
 mongoose.Promise = global.Promise;
-// const connectionUrl = process.env.ATLAS_URI;
-const connectionUrl = process.env.MONGO_DB_URI;
+const connectionUrl = process.env.ATLAS_URI;
+// const connectionUrl = process.env.MONGO_DB_URI;
 console.log('Connecting to Mongo DB...');
 mongoose.connect(connectionUrl,
   {
