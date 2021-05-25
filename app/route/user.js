@@ -10,6 +10,6 @@ user.use(bodyParser.urlencoded({ extended: false }));
 
 user.post('/register', asyncHandler((req, res) => userController.registerUser(req, res)));
 
-user.post('/login', asyncHandler((req, res) => userController.signIn(req, res)));
+user.post('/login', asyncHandler((req, res) => userController.loginUser(req, res)));
 
 module.exports = user;

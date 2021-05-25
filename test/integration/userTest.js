@@ -18,7 +18,7 @@ describe('users', () => {
       done();
     });
   });
-  describe('/POST regester', () => {
+  describe('/POST register', () => {
     it('it should allow a user to sign up', (done) => {
       chai.request(index)
         .post('/register')
@@ -26,12 +26,29 @@ describe('users', () => {
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.be.a('object');
-          res.body.should.have.property('message').eql('Successfully signed up');
+          res.body.should.have.property('message').eql('Successfully signed up.');
           res.body.data.should.have.property('email');
           res.body.data.should.have.property('password');
           done();
         });
     });
+  });
+
+  afterEach((done) => {
+    describe('/POST register', () => {
+      it('it return an error because the email already exist.', (done) => {
+        chai.request(index)
+          .post('/register')
+          .send(userJSON)
+          .end((err, res) => {
+            res.should.have.status(409);
+            res.body.should.be.a('object');
+            res.body.should.have.property('message').eql('This email already exists, kindly login.');
+            done();
+          });
+      });
+    });
+    done();
   });
 });
 
@@ -43,7 +60,7 @@ describe('/POST login', () => {
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.be.a('object');
-        res.body.should.have.property('message').eql('Login was successful');
+        res.body.should.have.property('message').eql('Login was successful.');
         res.body.data.should.have.property('email');
         done();
       });

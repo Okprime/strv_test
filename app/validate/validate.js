@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const userModel = require('../model/user');
 
 module.exports = (req, res, next) => {
-  if (process.env.URL_PATH.includes(req.url)) {
+  if (process.env.EXEMPTED_ENDPOINTS.includes(req.url)) {
     return next();
   }
   const token = req.headers['x-access-token'];

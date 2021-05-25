@@ -8,6 +8,8 @@ module.exports = {
   async registerUser(req, res) {
     let messageBody;
     let result;
+    let error;
+    let code;
 
     try {
       // validate the request body
@@ -16,30 +18,32 @@ module.exports = {
       result = await userService.registerUser(req.body);
 
       if (result === false) {
-        console.log('This email already exists, kindly login');
-        messageBody = 'This email already exists, kindly login';
-        return res.status(409).send({
-          error: true,
-          code: 409,
-          message: messageBody,
+        error = true;
+        code = 409;
+        messageBody = 'This email already exists, kindly login.';
+        console.log('This email already exists, kindly login.');
+      } else if (result === null) {
+        error = true;
+        code = 500;
+        messageBody = 'An error occurred.';
+        console.log('An error occurred.');
+      } else {
+        console.log('Successfully signed up.');
+        return res.status(201).send({
+          error: false,
+          code: 201,
+          message: 'Successfully signed up.',
+          data: result.result,
+          token: result.token,
         });
       }
-      if (result === null) {
-        return res.status(500).send({
-          error: true,
-          code: 500,
-          message: 'An error occurred',
-        });
-      }
-      return res.status(201).send({
-        error: false,
-        code: 201,
-        message: 'Successfully signed up',
-        data: result.result,
-        token: result.token,
+      return res.status(code).send({
+        error,
+        code,
+        message: messageBody,
       });
     } catch (error) {
-      console.log('error', error.details[0]);
+      console.log('An error occured while registering a user', error);
       return res.status(400).send({
         message: `${error.details[0].message.replace(/['"]+/g, '')}.`,
         status: 'error',
@@ -48,14 +52,17 @@ module.exports = {
     }
   },
 
-  async signIn(req, res) {
+  async loginUser(req, res) {
     let messageBody;
     let error;
     let code;
 
     try {
+      // validate the request body
       await signInSchema.validateAsync(req.body);
       const data = await userService.getOneData(userModel, req.body.email);
+
+      // check if the user exist in the db
       const isUserExist = await userService.validateUser(
         data,
         req.body.password,
@@ -64,16 +71,16 @@ module.exports = {
       if (isUserExist === null) {
         error = true;
         code = 404;
-        console.log('User does not exist, kindly registe');
-        messageBody = 'User does not exist, kindly register';
+        messageBody = 'User does not exist, kindly register.';
+        console.log('User does not exist, kindly register.');
       } else if (isUserExist === false) {
-        console.log('Incorrect password');
         error = true;
         code = 400;
-        messageBody = 'Incorrect password';
+        messageBody = 'Incorrect password.';
+        console.log('Incorrect password.');
       } else {
-        console.log('Login was successful');
-        messageBody = 'Login was successful';
+        console.log('Login was successful.');
+        messageBody = 'Login was successful.';
         return res.status(200).send({
           error: false,
           code: 200,
@@ -89,7 +96,7 @@ module.exports = {
         message: messageBody,
       });
     } catch (error) {
-      console.log('error', error.details[0]);
+      console.log('An error occured whie logging in a user', error);
       return res.status(400).send({
         message: `${error.details[0].message.replace(/['"]+/g, '')}.`,
         status: 'error',

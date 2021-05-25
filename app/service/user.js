@@ -10,9 +10,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const userModel = require('../model/user');
 
-const generateToken = (userData) => jwt.sign({ userData },
-  process.env.SECRET_KEY, { expiresIn: 86400 });
 module.exports = {
+
+  async generateToken(userData) {
+    return jwt.sign({ userData },
+      process.env.SECRET_KEY, { expiresIn: 86400 });
+  },
 
   // hash the password before saving to the db
   async hashPassword(data) {
@@ -29,7 +32,7 @@ module.exports = {
     try {
       data.password = await this.hashPassword(data.password);
       const result = await userModel.create(data);
-      const token = await generateToken(result);
+      const token = await this.generateToken(result);
       return { result, token };
     } catch (e) {
       console.log('an error occurred');
@@ -55,14 +58,13 @@ module.exports = {
 
   async validateUser(param, yet) {
     if (param === null) {
-      console.log('Data gotten');
       return null;
     }
     // Load hash from your password DB.
     return bcrypt.compare(yet, param.password).then(async (result) => {
       if (param && result === true) {
         const user = param.toObject();
-        const token = await generateToken(user);
+        const token = await this.generateToken(user);
         delete user.password;
         return { user, token };
       }

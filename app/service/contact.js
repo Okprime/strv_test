@@ -7,8 +7,6 @@ module.exports = {
     await firebaseDB.ref(addressName).push(data, (error) => {
       if (error) {
         console.log(`Failed with error: ${error}`);
-      } else {
-        console.log('success');
       }
     });
   },
