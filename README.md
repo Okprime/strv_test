@@ -1,32 +1,48 @@
-# Welcome to strv_test Application!
+Welcome!
 
-Welcome to **strv_test**! This application handles interactions between USERS and POST.
+- ##### API DOCS - https://documenter.getpostman.com/view/6090065/TzXwEy52
 
-# Technology Stack
-The application uses the following technology tools:
+TECHNOLOGY USED
+```
+- Back-end: JavaScript (Node.js)
 
-* Node.Js: Server-side scripting language
+- CI Travis
 
-* MongoDB: For storing user data
+- Deployment: Heroku
 
-* Firebase: For storing contacts
+```
 
-* Express: Node.Js web application framework
+PROJECT STRUCTURE
+```
+.
+strv_test
+├── app
+├── node_modules
+├── test
+├── .env
+├── .eslintrc.json
+├── .gitignore
+├── .travis.yml
+├── heroku.yml
+├── index.js
+├── package-lock.json
+├── package.json
+└── README.md
+├── sample.env
+```
 
+```markdown
+ INSTALLATION AND LOCAL SETUP
 
-# How it works
-The application handles the following requests:
+- Run the command `git clone https://github.com/Okprime/strv_test.git` on your terminal to clone this repo to your current directory.
 
-* User creation and authentication
+```
+Run the app with this command
+```
+npm install
 
-* Endpoints Authorization
+```
+```
+npm run dev
 
-* Contact creation
-
-# CI
-
-* Travis
-
-# Deployment
-Heroku
-
+```
